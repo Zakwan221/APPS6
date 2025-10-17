@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Flow - Asturi Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile App Container */
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media screen and (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .main-content {
+                padding: 0 16px 100px 16px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 0 12px 100px 12px;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: left;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px 100px 20px;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            background: #e5e7eb;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            min-width: 80px;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #1f2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button:hover {
+            color: #1f2937;
+        }
+
+        /* Cash Flow Chart Card */
+        .cashflow-chart-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cashflow-chart-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .chart-header {
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .chart-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Chart Grid */
+        .chart-grid {
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 20px;
+            bottom: 40px;
+            border-left: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e5e7eb;
+            background-image: 
+                linear-gradient(to right, #f1f5f9 1px, transparent 1px),
+                linear-gradient(to bottom, #f1f5f9 1px, transparent 1px);
+            background-size: 20% 25%;
+        }
+
+        /* Y-axis labels */
+        .y-axis {
+            position: absolute;
+            left: 0;
+            top: 20px;
+            bottom: 40px;
+            width: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-right: 10px;
+        }
+
+        .y-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* X-axis labels */
+        .x-axis {
+            position: absolute;
+            bottom: 0;
+            left: 60px;
+            right: 20px;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .x-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Chart Line */
+        .chart-line {
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 20px;
+            bottom: 40px;
+        }
+
+        .line-path {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Chart Points */
+        .chart-points {
+            position: absolute;
+            top: 20px;
+            left: 60px;
+            right: 20px;
+            bottom: 40px;
+        }
+
+        .chart-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #3b82f6;
+            border: 3px solid white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 3px 6px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .chart-point:hover {
+            transform: translate(-50%, -50%) scale(1.4);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.4);
+            background: #2563eb;
+        }
+
+        /* Tooltip */
+        .chart-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .chart-tooltip.show {
+            opacity: 1;
+        }
+
+        .chart-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Monthly Cash Flow Section */
+        .monthly-cashflow {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+        }
+
+        .monthly-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        .monthly-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .monthly-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .monthly-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .month-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .month-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .net-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .flow-details {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .flow-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .flow-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .flow-item.inflow .flow-value {
+            color: #059669;
+        }
+
+        .flow-item.outflow .flow-value {
+            color: #dc2626;
+        }
+
+        /* Mobile responsiveness for monthly section */
+        @media screen and (max-width: 480px) {
+            .monthly-cashflow {
+                padding: 20px;
+                margin-top: 16px;
+            }
+            
+            .monthly-title {
+                font-size: 16px;
+                margin-bottom: 16px;
+            }
+            
+            .monthly-item {
+                padding: 14px;
+            }
+            
+            .month-name {
+                font-size: 14px;
+            }
+            
+            .net-amount {
+                font-size: 16px;
+            }
+            
+            .flow-details {
+                gap: 16px;
+            }
+            
+            .flow-label {
+                font-size: 11px;
+            }
+            
+            .flow-value {
+                font-size: 13px;
+            }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            padding: 8px 0 20px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Enhanced Mobile Navigation */
+        @media screen and (max-width: 480px) {
+            .bottom-nav {
+                padding: 6px 0 16px 0;
+            }
+            
+            .nav-items {
+                padding: 0 12px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                min-width: 60px;
+                border-radius: 12px;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-item:active {
+                transform: scale(0.95);
+                background: rgba(59, 130, 246, 0.1);
+            }
+            
+            .nav-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #6b7280;
+            transition: all 0.2s ease;
+        }
+
+        .icon-dashboard::before {
+            content: '⊞';
+        }
+
+        .icon-properties::before {
+            content: '⌂';
+        }
+
+        .icon-financial::before {
+            content: '$';
+        }
+
+        .icon-tenants::before {
+            content: 'U';
+        }
+
+        .nav-item.active .icon-dashboard,
+        .nav-item.active .icon-financial,
+        .nav-item.active .icon-tenants,
+        .nav-item.active .icon-properties {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
+            margin: 8px auto 0 auto;
+            opacity: 0.3;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cashflow-chart-card {
+            animation: slideInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Financial Reports</h1>
+            <p>Comprehensive financial overview</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-button" onclick="window.location.href='financial.html'">P&L</button>
+                <button class="tab-button" onclick="window.location.href='Balance.html'">Balance</button>
+                <button class="tab-button active">Cash Flow</button>
+            </div>
+
+            <!-- Cash Flow Chart -->
+            <div class="cashflow-chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Cash Flow Trend</h3>
+                    <p class="chart-subtitle">Last 12 Months</p>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-canvas">
+                        <!-- Y-axis -->
+                        <div class="y-axis">
+                            <div class="y-label">160K</div>
+                            <div class="y-label">120K</div>
+                            <div class="y-label">80K</div>
+                            <div class="y-label">40K</div>
+                            <div class="y-label">0</div>
+                        </div>
+                        
+                        <!-- Chart Grid -->
+                        <div class="chart-grid"></div>
+                        
+                        <!-- Chart Line (SVG) -->
+                        <svg class="line-path" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <polyline
+                                fill="none"
+                                stroke="url(#lineGradient)"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                points="8,75 17,70 26,68 35,72 44,65 53,62 62,60 71,58 80,56 89,54 95,52 95,50"
+                            />
+                        </svg>
+                        
+                        <!-- Chart Points -->
+                        <div class="chart-points">
+                            <div class="chart-point" style="left: 8%; top: 75%;" data-value="130000"></div>
+                            <div class="chart-point" style="left: 17%; top: 70%;" data-value="135000"></div>
+                            <div class="chart-point" style="left: 26%; top: 68%;" data-value="138000"></div>
+                            <div class="chart-point" style="left: 35%; top: 72%;" data-value="132000"></div>
+                            <div class="chart-point" style="left: 44%; top: 65%;" data-value="142000"></div>
+                            <div class="chart-point" style="left: 53%; top: 62%;" data-value="145000"></div>
+                            <div class="chart-point" style="left: 62%; top: 60%;" data-value="147000"></div>
+                            <div class="chart-point" style="left: 71%; top: 58%;" data-value="149000"></div>
+                            <div class="chart-point" style="left: 80%; top: 56%;" data-value="151000"></div>
+                            <div class="chart-point" style="left: 89%; top: 54%;" data-value="153000"></div>
+                            <div class="chart-point" style="left: 95%; top: 52%;" data-value="155000"></div>
+                            <div class="chart-point" style="left: 95%; top: 50%;" data-value="157000"></div>
+                        </div>
+                        
+                        <!-- X-axis -->
+                        <div class="x-axis">
+                            <div class="x-label">Feb</div>
+                            <div class="x-label">Apr</div>
+                            <div class="x-label">Jun</div>
+                            <div class="x-label">Aug</div>
+                            <div class="x-label">Oct</div>
+                            <div class="x-label">Dec</div>
+                        </div>
+                        
+                        <!-- Tooltip -->
+                        <div class="chart-tooltip" id="chartTooltip"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Cash Flow Details -->
+            <div class="monthly-cashflow">
+                <h3 class="monthly-title">Monthly Cash Flow</h3>
+                
+                <div class="monthly-items">
+                    <!-- December -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Dec</h4>
+                            <div class="net-amount">$141K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$197K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$56K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- November -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Nov</h4>
+                            <div class="net-amount">$142K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$199K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$57K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- October -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Oct</h4>
+                            <div class="net-amount">$141K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$197K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$56K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- September -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Sep</h4>
+                            <div class="net-amount">$140K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$195K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$55K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- August -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Aug</h4>
+                            <div class="net-amount">$142K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$198K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$56K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- July -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Jul</h4>
+                            <div class="net-amount">$139K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$194K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$55K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- June -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Jun</h4>
+                            <div class="net-amount">$138K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$192K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$54K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- May -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">May</h4>
+                            <div class="net-amount">$137K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$190K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$53K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- April -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Apr</h4>
+                            <div class="net-amount">$136K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$188K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$52K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- March -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Mar</h4>
+                            <div class="net-amount">$135K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$186K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$51K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- February -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Feb</h4>
+                            <div class="net-amount">$134K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$184K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$50K</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- January -->
+                    <div class="monthly-item">
+                        <div class="month-header">
+                            <h4 class="month-name">Jan</h4>
+                            <div class="net-amount">$133K</div>
+                        </div>
+                        <div class="flow-details">
+                            <div class="flow-item inflow">
+                                <span class="flow-label">Inflow:</span>
+                                <span class="flow-value">$182K</span>
+                            </div>
+                            <div class="flow-item outflow">
+                                <span class="flow-label">Outflow:</span>
+                                <span class="flow-value">$49K</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon icon-dashboard"></div>
+                    <div class="nav-label">Dashboard</div>
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <div class="nav-icon icon-properties"></div>
+                    <div class="nav-label">Properties</div>
+                </a>
+                <a href="financial.html" class="nav-item active">
+                    <div class="nav-icon icon-financial"></div>
+                    <div class="nav-label">Financial</div>
+                </a>
+                <a href="tenant.html" class="nav-item">
+                    <div class="nav-icon icon-tenants"></div>
+                    <div class="nav-label">Tenants</div>
+                </a>
+                <a href="reportview.html" class="nav-item">
+                    <div class="nav-icon icon-reports">≡</div>
+                    <div class="nav-label">Report</div>
+                </a>
+                <a href="setting.html" class="nav-item">
+                    <div class="nav-icon icon-settings">⚙</div>
+                    <div class="nav-label">Settings</div>
+                </a>
+            </div>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Add haptic feedback if supported
+                    if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                    }
+                });
+            });
+
+            // Mobile-optimized interactions
+            function initializeMobileOptimizations() {
+                // Prevent zoom on double tap
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+
+                // Add smooth scrolling for mobile
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // Add haptic feedback for navigation
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('touchstart', function() {
+                        // Add visual feedback
+                        this.style.transform = 'scale(0.95)';
+                        
+                        // Vibrate if supported
+                        if (navigator.vibrate) {
+                            navigator.vibrate(10);
+                        }
+                    });
+                    
+                    item.addEventListener('touchend', function() {
+                        // Reset visual feedback
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    });
+                });
+            }
+
+            // Initialize mobile optimizations
+            initializeMobileOptimizations();
+
+            // Chart tooltip functionality
+            initializeChartTooltips();
+        });
+
+        // Chart tooltip functionality
+        function initializeChartTooltips() {
+            const chartPoints = document.querySelectorAll('.chart-point');
+            const tooltip = document.getElementById('chartTooltip');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            chartPoints.forEach((point, index) => {
+                const value = point.getAttribute('data-value');
+                const monthIndex = index + 1; // Starting from Feb (index 1)
+                const monthName = months[monthIndex] || months[index];
+
+                point.addEventListener('mouseenter', function(e) {
+                    const rect = point.getBoundingClientRect();
+                    const containerRect = point.closest('.chart-canvas').getBoundingClientRect();
+                    
+                    tooltip.textContent = `${monthName}: RM ${parseInt(value).toLocaleString()}`;
+                    tooltip.classList.add('show');
+                    
+                    // Position tooltip
+                    const tooltipRect = tooltip.getBoundingClientRect();
+                    const left = rect.left - containerRect.left - (tooltipRect.width / 2) + (rect.width / 2);
+                    const top = rect.top - containerRect.top - tooltipRect.height - 10;
+                    
+                    tooltip.style.left = Math.max(10, Math.min(left, containerRect.width - tooltipRect.width - 10)) + 'px';
+                    tooltip.style.top = Math.max(10, top) + 'px';
+                });
+
+                point.addEventListener('mouseleave', function() {
+                    tooltip.classList.remove('show');
+                });
+
+                // Touch support for mobile
+                point.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    const rect = point.getBoundingClientRect();
+                    const containerRect = point.closest('.chart-canvas').getBoundingClientRect();
+                    
+                    tooltip.textContent = `${monthName}: RM ${parseInt(value).toLocaleString()}`;
+                    tooltip.classList.add('show');
+                    
+                    const tooltipRect = tooltip.getBoundingClientRect();
+                    const left = rect.left - containerRect.left - (tooltipRect.width / 2) + (rect.width / 2);
+                    const top = rect.top - containerRect.top - tooltipRect.height - 10;
+                    
+                    tooltip.style.left = Math.max(10, Math.min(left, containerRect.width - tooltipRect.width - 10)) + 'px';
+                    tooltip.style.top = Math.max(10, top) + 'px';
+                    
+                    // Hide tooltip after 2 seconds on mobile
+                    setTimeout(() => {
+                        tooltip.classList.remove('show');
+                    }, 2000);
+                    
+                    // Haptic feedback
+                    if (navigator.vibrate) {
+                        navigator.vibrate(15);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

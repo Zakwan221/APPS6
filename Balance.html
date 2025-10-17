@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Reports - Asturi Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile App Container */
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media screen and (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .main-content {
+                padding: 0 16px 100px 16px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 0 12px 100px 12px;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: left;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px 100px 20px;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            background: #e5e7eb;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            min-width: 80px;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #1f2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button:hover {
+            color: #1f2937;
+        }
+
+        /* Balance Cards */
+        .balance-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .balance-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .balance-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .balance-amount {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .assets-amount {
+            color: #10b981;
+        }
+
+        .liabilities-amount {
+            color: #dc2626;
+        }
+
+        .equity-amount {
+            color: #3b82f6;
+        }
+
+        .current-assets-amount {
+            color: #10b981;
+        }
+
+        /* Current Assets Card Styling */
+        .balance-card.current-assets {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card.current-assets:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .current-assets-header {
+            background: transparent;
+        }
+
+        .current-assets-header h3 {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .non-current-assets-amount {
+            color: #3b82f6;
+        }
+
+        /* Non Current Assets Card Styling */
+        .balance-card.non-current-assets {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card.non-current-assets:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .non-current-assets-header {
+            background: transparent;
+        }
+
+        .non-current-assets-header h3 {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .equity-header {
+            background: transparent;
+        }
+
+        .equity-header h3 {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .liabilities-header {
+            background: transparent;
+        }
+
+        .liabilities-header h3 {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .non-current-liabilities-header {
+            background: transparent;
+        }
+
+        .non-current-liabilities-header h3 {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .current-liabilities-header {
+            background: transparent;
+        }
+
+        .current-liabilities-header h3 {
+            color: #1f2937;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Liability Cards Spacing */
+        .balance-card.non-current-liabilities {
+            margin-bottom: 32px;
+        }
+
+        .balance-card.current-liabilities {
+            margin-bottom: 32px;
+        }
+
+        /* Liability Subcategory Spacing */
+        .balance-card.non-current-liabilities .asset-subcategory {
+            margin-bottom: 20px;
+        }
+
+        .balance-card.current-liabilities .asset-subcategory {
+            margin-bottom: 20px;
+        }
+
+        /* Add extra space between liability sections */
+        .balance-card.non-current-liabilities {
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+        }
+
+        .balance-card.current-liabilities {
+            background: linear-gradient(135deg, #ffffff 0%, #fefefe 100%);
+            border-top: 1px solid #f8fafc;
+            padding-top: 24px;
+        }
+
+        /* Balance Sub-Card Styling */
+        .balance-sub-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .balance-sub-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .balance-sub-card .breakdown-header h4 {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .balance-sub-card .balance-amount {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        /* Balance Sheet Structure */
+        .balance-structure {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-structure:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .structure-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 36px;
+            text-align: center;
+            letter-spacing: -0.025em;
+            position: relative;
+        }
+
+        .structure-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #3b82f6;
+            border-radius: 2px;
+        }
+
+        /* Pie Chart */
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .pie-chart {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            position: relative;
+            background: conic-gradient(
+                from 0deg,
+                #10b981 0deg 120deg,
+                #dc2626 120deg 300deg,
+                #3b82f6 300deg 360deg
+            );
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.12),
+                inset 0 0 0 8px rgba(255, 255, 255, 0.9),
+                inset 0 0 0 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .pie-chart::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .pie-chart::after {
+            content: 'Balance\ASheet';
+            white-space: pre;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            line-height: 1.3;
+            z-index: 3;
+        }
+
+        .pie-chart:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 
+                0 12px 48px rgba(0, 0, 0, 0.18),
+                inset 0 0 0 8px rgba(255, 255, 255, 0.95),
+                inset 0 0 0 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 360px;
+            height: 360px;
+            border: 2px dashed rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .chart-container:hover::before {
+            opacity: 1;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            margin-top: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            width: 220px;
+            justify-content: flex-start;
+        }
+
+        .legend-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-color.assets {
+            background: #10b981;
+        }
+
+        .legend-color.liabilities {
+            background: #dc2626;
+        }
+
+        .legend-color.equity {
+            background: #3b82f6;
+        }
+
+        .legend-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .legend-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            letter-spacing: -0.01em;
+        }
+
+        .legend-amount {
+            font-size: 12px;
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .legend-item:nth-child(1) .legend-amount {
+            color: #10b981; /* Assets - Green */
+        }
+
+        .legend-item:nth-child(2) .legend-amount {
+            color: #dc2626; /* Liabilities - Red */
+        }
+
+        .legend-item:nth-child(3) .legend-amount {
+            color: #3b82f6; /* Equity - Blue */
+        }
+
+        .legend-item:hover .legend-text {
+            color: #111827;
+        }
+
+        .legend-item:hover .legend-amount {
+            color: #047857;
+        }
+
+        /* Asset Breakdown Styles */
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .breakdown-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .toggle-arrow {
+            cursor: pointer;
+            font-size: 14px;
+            color: #6b7280;
+            transition: transform 0.3s ease;
+            padding: 4px;
+            border-radius: 4px;
+            background: #f3f4f6;
+        }
+
+        .toggle-arrow:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .section-content {
+            margin-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+
+        .asset-category {
+            margin-bottom: 24px;
+        }
+
+        .category-header {
+            margin-bottom: 16px;
+        }
+
+        .non-current-header {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .current-header {
+            background: #10b981;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .category-title {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .asset-subcategory {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #f1f5f9;
+            margin-bottom: 16px;
+            height: auto;
+            min-height: auto;
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            isolation: isolate;
+            clear: both;
+            contain: layout style;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .asset-subcategory:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .subcategory-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            min-height: 60px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: visible;
+            gap: 8px;
+        }
+
+        .subcategory-item:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .main-item {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            font-weight: 600;
+            margin-bottom: 0;
+            border-radius: 12px;
+        }
+
+        .sub-item {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            font-weight: 500;
+            margin-left: 0;
+            margin-bottom: 6px;
+        }
+
+        .detail-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            margin-left: 0;
+            font-size: 14px;
+        }
+
+        .item-code {
+            min-width: 60px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 12px;
+            background: #f3f4f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        .item-name {
+            flex: 1;
+            color: #1f2937;
+            font-size: 14px;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            word-wrap: break-word;
+            line-height: 1.3;
+        }
+
+        .item-amount {
+            font-weight: 600;
+            color: #059669;
+            font-size: 14px;
+            min-width: 60px;
+            text-align: right;
+            margin-left: 0;
+        }
+
+        .main-item .item-code {
+            background: #dc2626;
+            color: white;
+        }
+
+        .sub-item .item-code {
+            background: #d97706;
+            color: white;
+        }
+
+        /* Asset Content Styles */
+        .asset-content {
+            margin-left: 20px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .main-item {
+            cursor: pointer;
+        }
+
+        .sub-item {
+            cursor: pointer;
+        }
+
+        /* Ensure consistent main item styling across all asset categories */
+        .asset-subcategory .main-item {
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+            border-radius: 12px;
+        }
+
+        .asset-subcategory .main-item .item-code {
+            min-width: 45px;
+            font-size: 10px;
+            padding: 4px 8px;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-right: 8px;
+            flex-shrink: 0;
+            background: #dc2626;
+            color: white;
+        }
+
+        .asset-subcategory .main-item .item-name {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 0;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            line-height: 1.3;
+            color: #1f2937;
+        }
+
+        .asset-subcategory .main-item .item-amount {
+            font-size: 12px;
+            font-weight: 700;
+            color: #059669;
+            text-align: right;
+            flex-shrink: 0;
+            margin-left: 4px;
+        }
+
+        /* Make sure the collapsed state shows consistent card heights */
+        .asset-subcategory .asset-content {
+            display: none;
+            position: relative;
+            width: 100%;
+        }
+
+        /* A01 content should be visible by default (orange card) */
+        #a01-content {
+            display: block !important;
+        }
+
+        /* A01 sub-items should be hidden by default */
+        #a01-1-content,
+        #a01-2-content,
+        #a01-3-content,
+        #a01-4-content,
+        #a01-5-content,
+        #a01-6-content {
+            display: none !important;
+        }
+
+        /* When content is shown, it doesn't affect the base card size */
+        .asset-subcategory .asset-content[style*="block"] {
+            display: block !important;
+            margin-top: 12px;
+            position: relative;
+        }
+
+        /* Ensure all asset subcategories have identical base appearance when collapsed */
+        .asset-subcategory.expanded {
+            min-height: auto;
+            height: auto;
+        }
+
+        /* Ensure no overlap between asset boxes */
+        .asset-category {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        /* Force A01 to look identical to other boxes */
+        .asset-subcategory:first-child {
+            margin-top: 0;
+        }
+
+        .asset-subcategory:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Content appears below the box when expanded */
+        .asset-subcategory > .asset-content {
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            margin: 0;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .asset-subcategory.expanded .asset-content {
+            display: block !important;
+        }
+
+        /* Fix sub-item positioning and styling */
+        .asset-content .sub-item {
+            margin-left: 0;
+            margin-bottom: 20px;
+            background: #fed7aa;
+            border: 1px solid #fdba74;
+            border-radius: 12px;
+            padding: 16px 20px;
+            min-height: 80px;
+            gap: 2px;
+        }
+
+        .asset-content .detail-item {
+            margin-left: 0;
+            margin-bottom: 20px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            min-height: 80px;
+            gap: 2px;
+        }
+
+        /* Nested asset content styling */
+        .asset-content .asset-content {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            margin: 20px 0;
+            padding: 0;
+        }
+
+        /* Fix item code, name, and amount alignment in sub-items */
+        .asset-content .subcategory-item .item-code {
+            min-width: 40px;
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 4px;
+            margin-top: 2px;
+            margin-right: 2px;
+            flex-shrink: 0;
+        }
+
+        .asset-content .subcategory-item .item-name {
+            font-size: 10px;
+            margin: 0;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+            line-height: 1.3;
+            flex: 1;
+            padding-top: 2px;
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        .asset-content .subcategory-item .item-amount {
+            font-size: 11px;
+            width: 60px;
+            text-align: right;
+            flex-shrink: 0;
+            padding-top: 2px;
+            font-weight: 600;
+            margin-left: 0;
+            padding-right: 0;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            padding: 8px 0 20px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Enhanced Mobile Navigation */
+        @media screen and (max-width: 480px) {
+            .bottom-nav {
+                padding: 6px 0 16px 0;
+            }
+            
+            .nav-items {
+                padding: 0 12px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                min-width: 60px;
+                border-radius: 12px;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-item:active {
+                transform: scale(0.95);
+                background: rgba(59, 130, 246, 0.1);
+            }
+            
+            .nav-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #6b7280;
+            transition: all 0.2s ease;
+        }
+
+        .icon-dashboard::before {
+            content: '⊞';
+        }
+
+        .icon-properties::before {
+            content: '⌂';
+        }
+
+        .icon-financial::before {
+            content: '$';
+        }
+
+        .icon-tenants::before {
+            content: 'U';
+        }
+
+        .icon-settings {
+            background: #e5e7eb;
+            border-radius: 4px;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nav-item.active .icon-dashboard,
+        .nav-item.active .icon-financial,
+        .nav-item.active .icon-tenants,
+        .nav-item.active .icon-properties,
+        .nav-item.active .icon-settings {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
+            margin: 8px auto 0 auto;
+            opacity: 0.3;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            .balance-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .pie-chart {
+                width: 280px;
+                height: 280px;
+            }
+
+            .pie-chart::before {
+                width: 100px;
+                height: 100px;
+            }
+
+            .pie-chart::after {
+                font-size: 12px;
+            }
+
+            .chart-container::before {
+                width: 320px;
+                height: 320px;
+            }
+
+            .chart-legend {
+                gap: 14px;
+                padding: 20px;
+            }
+
+            .legend-item {
+                padding: 12px 16px;
+                width: 200px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .balance-structure {
+                padding: 24px;
+            }
+
+            .structure-title {
+                font-size: 20px;
+                margin-bottom: 28px;
+            }
+
+            .balance-amount {
+                font-size: 20px;
+            }
+
+            .pie-chart {
+                width: 240px;
+                height: 240px;
+            }
+
+            .pie-chart::before {
+                width: 80px;
+                height: 80px;
+            }
+
+            .pie-chart::after {
+                font-size: 11px;
+            }
+
+            .chart-container::before {
+                width: 280px;
+                height: 280px;
+            }
+
+            .chart-legend {
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .legend-item {
+                padding: 10px 14px;
+                width: 180px;
+            }
+
+            .legend-color {
+                width: 16px;
+                height: 16px;
+            }
+
+            .legend-text {
+                font-size: 14px;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .balance-card,
+        .balance-structure {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .balance-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .balance-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Financial Reports</h1>
+            <p>Comprehensive financial overview</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-button" onclick="window.location.href='financial.html'">P&L</button>
+                <button class="tab-button active">Balance</button>
+                <button class="tab-button" onclick="window.location.href='cashflow.html'">Cash Flow</button>
+            </div>
+
+        <!-- Balance Sheet Structure -->
+        <div class="balance-structure">
+            <h2 class="structure-title">Balance Sheet Structure</h2>
+            
+            <div class="chart-container">
+                <div class="pie-chart"></div>
+            </div>
+
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div class="legend-color assets"></div>
+                    <div class="legend-content">
+                        <span class="legend-text">Assets</span>
+                        <span class="legend-amount">RM 149,167,897</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color liabilities"></div>
+                    <div class="legend-content">
+                        <span class="legend-text">Liabilities</span>
+                        <span class="legend-amount">RM 200,993,970</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color equity"></div>
+                    <div class="legend-content">
+                        <span class="legend-text">Equity</span>
+                        <span class="legend-amount">-RM 51,826,074</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Balance Cards -->
+        <div class="balance-cards">
+            <!-- NON CURRENT ASSETS Card -->
+            <div class="balance-card non-current-assets">
+                <div class="breakdown-header non-current-assets-header">
+                    <h3>NON CURRENT ASSETS</h3>
+                    <div class="toggle-arrow" onclick="toggleSection('non-current-assets-section')">▼</div>
+                </div>
+                <div class="balance-amount non-current-assets-amount">RM 149,167,897</div>
+                        
+                        <div class="section-content" id="non-current-assets-section">
+                            <!-- Non Current Assets Category -->
+                            <div class="asset-category">
+                        
+                        <!-- Property, Plant and Equipment -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('a01-content')">
+                                <div class="item-code">A01</div>
+                                <div class="item-name">Property, Plant<br>and Equipment</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-content">
+                            
+                            <!-- Long Term Leasehold land -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a01-1-content')">
+                                <div class="item-code">A01-1</div>
+                                <div class="item-name">Long Term<br>Leasehold land</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-1-content">
+                            
+                            <!-- Land Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">L01-1</div>
+                                <div class="item-name">Land</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">L01-2</div>
+                                <div class="item-name">Accumulated<br>Depreciation - Land</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Buildings -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a01-2-content')">
+                                <div class="item-code">A01-2</div>
+                                <div class="item-name">Buildings<br>&nbsp;</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-2-content">
+                            
+                            <!-- Building Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">B01-1</div>
+                                <div class="item-name">Buildings<br>&nbsp;</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">B01-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Buildings</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Plant and Machinery -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a01-3-content')">
+                                <div class="item-code">A01-3</div>
+                                <div class="item-name">Plant and<br>Machinery</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-3-content">
+                            
+                            <!-- Plant and Machinery Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM01-1</div>
+                                <div class="item-name">Overhead<br>Crane 2</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM01-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Overhead Crane 2</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM02-1</div>
+                                <div class="item-name">CNC<br>Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM02-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- CNC Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM03-1</div>
+                                <div class="item-name">Fixed<br>Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM03-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Fixed Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM04-1</div>
+                                <div class="item-name">Special<br>Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM04-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Special Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM05-1</div>
+                                <div class="item-name">Welding Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM05-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Welding Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM06-1</div>
+                                <div class="item-name">Rotator2</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM06-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Rotator2</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM07-1</div>
+                                <div class="item-name">Well Services Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PM07-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Well Services Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            </div>
+                            
+                            <!-- Motor Vehicle -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a01-4-content')">
+                                <div class="item-code">A01-4</div>
+                                <div class="item-name">Motor Vehicle</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-4-content">
+                            
+                            <!-- Motor Vehicle Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">MV01-1</div>
+                                <div class="item-name">Vehicles</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">MV01-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Vehicles</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">MV02-1</div>
+                                <div class="item-name">Conetto, Truck, Lorry & Mobile Cranes</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">MV02-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Conetto, Truck, Lorry & Mobile Cranes</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">MV03-1</div>
+                                <div class="item-name">Motor Vehicle</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">MV03-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Motor Vehicles</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Equipment and Fixtures -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a01-5-content')">
+                                <div class="item-code">A01-5</div>
+                                <div class="item-name">Equipment and<br>Fixtures</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-5-content">
+                            
+                            <!-- Equipment and Fixtures Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ01-1</div>
+                                <div class="item-name">Computer Hardware</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ01-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Computer Hardware</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ02-1</div>
+                                <div class="item-name">Computer Software</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ02-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Computer Software</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ03-1</div>
+                                <div class="item-name">QC Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ03-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- QC Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ04-1</div>
+                                <div class="item-name">Scaffolding Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ04-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Scaffolding Equipments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ05-1</div>
+                                <div class="item-name">Blasting & Painting</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ05-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Blasting & Painting</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ06-1</div>
+                                <div class="item-name">Airconds</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ06-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Airconds</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ07-1</div>
+                                <div class="item-name">Office Equipment</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">EQ07-2</div>
+                                <div class="item-name">Accumulated Depreciation<br>- Office Equipment</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Renovation -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a01-6-content')">
+                                <div class="item-code">A01-6</div>
+                                <div class="item-name">Renovation</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a01-6-content">
+                            
+                            <!-- Renovation Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">R01-1</div>
+                                <div class="item-name">Renovation - Asset</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">R02-1</div>
+                                <div class="item-name">Renovation - Sikap Bekai</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">R03-1</div>
+                                <div class="item-name">Renovation - Structure and Renovation</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Subsidiaries Section -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('a02-content')">
+                                <div class="item-code">A02</div>
+                                <div class="item-name">Subsidiaries</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a02-content">
+                            
+                            <!-- Subsidiaries Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">S-1</div>
+                                <div class="item-name">Asturi Truck & Crane Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">S-2</div>
+                                <div class="item-name">Lagisan Warna Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Other Investments Section -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('a03-content')">
+                                <div class="item-code">A03</div>
+                                <div class="item-name">Other<br>Investments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a03-content">
+                            
+                            <!-- Other Investments Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">A03-1</div>
+                                <div class="item-name">Investment Stock Market</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">A03-2</div>
+                                <div class="item-name">Provision for Diminution in Share Value</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+
+            <!-- CURRENT ASSETS Card -->
+            <div class="balance-card current-assets">
+                <div class="breakdown-header current-assets-header">
+                    <h3>CURRENT ASSETS</h3>
+                    <div class="toggle-arrow" onclick="toggleSection('current-assets-section')">▼</div>
+                </div>
+                <div class="balance-amount current-assets-amount">RM 0</div>
+                
+                <div class="section-content" id="current-assets-section">
+                            <!-- Current Assets Category -->
+                            <div class="asset-category">
+                        <!-- Inventories, at cost -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('a04-content')">
+                                <div class="item-code">A04</div>
+                                <div class="item-name">Inventories,<br>at cost</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a04-content">
+                            
+                            <!-- Inventories Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">A04-1</div>
+                                <div class="item-name">Stock</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Receivables, Deposit And Prepayments -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('a05-content')">
+                                <div class="item-code">A05</div>
+                                <div class="item-name">Receivables, Deposit<br>And Prepayments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a05-content">
+                            
+                            <!-- Trade Receivables -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a05-1-content')">
+                                <div class="item-code">A05-1</div>
+                                <div class="item-name">Trade Receivables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a05-1-content">
+                            
+                            <!-- Trade Receivables Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">TR-1</div>
+                                <div class="item-name">Trade Debtors</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Other Receivables -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a05-2-content')">
+                                <div class="item-code">A05-2</div>
+                                <div class="item-name">Other Receivables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a05-2-content">
+                            
+                            <!-- Other Receivables Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-1</div>
+                                <div class="item-name">Other Debtors &<br>Receivables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-2</div>
+                                <div class="item-name">Hex Thermal Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-3</div>
+                                <div class="item-name">Excell Steel Builders Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-4</div>
+                                <div class="item-name">Frontline Support Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-5</div>
+                                <div class="item-name">Siklon Separators<br>Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-6</div>
+                                <div class="item-name">Sikap Bekai Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-7</div>
+                                <div class="item-name">Red Sea Engineering<br>Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-8</div>
+                                <div class="item-name">Cross Border Inspection<br>& Services Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-9</div>
+                                <div class="item-name">Sikap Biasa Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-10</div>
+                                <div class="item-name">Everest Roofing<br>Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-11</div>
+                                <div class="item-name">ONCSHA Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-12</div>
+                                <div class="item-name">Loginan Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-13</div>
+                                <div class="item-name">Plant & Maintenance<br>Services Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-14</div>
+                                <div class="item-name">Gebeng Engineering Service Centre</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-15</div>
+                                <div class="item-name">Well Services Division</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-16</div>
+                                <div class="item-name">Asturi Process System<br>Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-17</div>
+                                <div class="item-name">Kejuruteraan Berkuat<br>Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">OR-18</div>
+                                <div class="item-name">Skin Faith Sdn Bhd</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Deposits -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a05-3-content')">
+                                <div class="item-code">A05-3</div>
+                                <div class="item-name">Deposits</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a05-3-content">
+                            
+                            <!-- Deposits Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-1</div>
+                                <div class="item-name">Deposit - KPAQ</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-2</div>
+                                <div class="item-name">Deposit - TNB</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-3</div>
+                                <div class="item-name">Deposit - JBA Pahang</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-4</div>
+                                <div class="item-name">Deposit - Telekom Malaysia</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-5</div>
+                                <div class="item-name">Deposit - Bid Bond</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-6</div>
+                                <div class="item-name">Deposit - Security Bond</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-7</div>
+                                <div class="item-name">Deposit - Rental</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">DEP-8</div>
+                                <div class="item-name">Deposit - Purchase of Assets</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Prepayments -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a05-4-content')">
+                                <div class="item-code">A05-4</div>
+                                <div class="item-name">Prepayments</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a05-4-content">
+                            <!-- Prepayments items would go here if any -->
+                            </div>
+                            
+                            <!-- Amount Due From Subsidiaries -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a05-5-content')">
+                                <div class="item-code">A05-5</div>
+                                <div class="item-name">Amount Due From Subsidiaries</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a05-5-content">
+                            
+                            <!-- Subsidiaries Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">SUB-1</div>
+                                <div class="item-name">Asturi Truck & Crane<br>Sdn Bhd (Receivable)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">SUB-2</div>
+                                <div class="item-name">Lapisan Warna Sdn Bhd<br>(Receivable)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Fixed Deposits, Bank And Cash Balances -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('a06-content')">
+                                <div class="item-code">A06</div>
+                                <div class="item-name">Fixed Deposits, Bank<br>And Cash Balances</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a06-content">
+                            
+                            <!-- Fixed Deposit With Licensed Banks -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a06-1-content')">
+                                <div class="item-code">A06-1</div>
+                                <div class="item-name">Fixed Deposit With<br>Licensed Banks</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a06-1-content">
+                            
+                            <!-- Fixed Deposit Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">FD-1</div>
+                                <div class="item-name">Fixed Deposit - RHB</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">FD-2</div>
+                                <div class="item-name">Fixed Deposit - Bank Islam</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            
+                            <!-- Bank and Cash Balances -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('a06-2-content')">
+                                <div class="item-code">A06-2</div>
+                                <div class="item-name">Bank and Cash Balances</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="a06-2-content">
+                            
+                            <!-- Bank and Cash Items -->
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-1</div>
+                                <div class="item-name">CIMB - Current Account, KPAQ Kln Port (8005425931)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-2</div>
+                                <div class="item-name">CIMB - Current Account, Jin Bank (8005362355)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-3</div>
+                                <div class="item-name">CIMB - Current Account, Sri Dagangan TS - Salary deduction (8005313076)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-4</div>
+                                <div class="item-name">CIMB - Current Account,Mont Kara Solaris (1474-0000511-10-1)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-5</div>
+                                <div class="item-name">BIMB 0601 9010 113074 (0)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-6</div>
+                                <div class="item-name">BIMB - Civil JKR Project Sungai Nibong/ FW (06019-01008-5122)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-7</div>
+                                <div class="item-name">RHB Bank - Current Account,Putra Square (20601-200-068236)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-8</div>
+                                <div class="item-name">RHB Bank Well Services (20601-200-132878)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-9</div>
+                                <div class="item-name">RHB Civil Project Account - (20601-200-132860)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-10</div>
+                                <div class="item-name">Maybank Berhad - Current Account (514011380675)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-11</div>
+                                <div class="item-name">Maybank Berhad - Current Account (563028-608-771)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-12</div>
+                                <div class="item-name">AM Bank Berhad (005-201-000368-8)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">BK-13</div>
+                                <div class="item-name">Multi Currency Account (606012-00000910)</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="subcategory-item detail-item">
+                                <div class="item-code">PC-1</div>
+                                <div class="item-name">Petty cash General</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            
+            <!-- NON CURRENT LIABILITIES Card -->
+            <div class="balance-card non-current-liabilities">
+                <div class="breakdown-header non-current-liabilities-header">
+                    <h3>NON CURRENT LIABILITIES</h3>
+                    <div class="toggle-arrow" onclick="toggleSection('non-current-liabilities-section')">▼</div>
+                </div>
+                <div class="balance-amount liabilities-amount">RM 0</div>
+                
+                <div class="section-content" id="non-current-liabilities-section">
+                    <!-- Non Current Liabilities Category -->
+                    <div class="asset-category">
+                        
+                        <!-- Borrowings -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('l01-content')">
+                                <div class="item-code">L01</div>
+                                <div class="item-name">Borrowings</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l01-content">
+                                <!-- Borrowings Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">HP01-1</div>
+                                    <div class="item-name">Toyota Capital - VAL 6588</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">HP01-2</div>
+                                    <div class="item-name">Interest in suspense - VAL 6588</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">HP02-1</div>
+                                    <div class="item-name">Toyota Capital - VAJ 6588</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">HP02-2</div>
+                                    <div class="item-name">Interest in suspense - VAJ 6588</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">HP03-1</div>
+                                    <div class="item-name">Toyota Capital - W5688H</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">HP04-2</div>
+                                    <div class="item-name">Interest in suspense -Nazaria CCB 5688</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Deferred Tax Liabilities -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('l02-content')">
+                                <div class="item-code">L02</div>
+                                <div class="item-name">Deferred Tax Liabilities</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l02-content">
+                                <!-- Deferred Tax Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">DT-1</div>
+                                    <div class="item-name">Deferred Taxation</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">DT-2</div>
+                                    <div class="item-name">Deferred Income - Government Grant</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CURRENT LIABILITIES Card -->
+            <div class="balance-card current-liabilities">
+                <div class="breakdown-header current-liabilities-header">
+                    <h3>CURRENT LIABILITIES</h3>
+                    <div class="toggle-arrow" onclick="toggleSection('current-liabilities-section')">▼</div>
+                </div>
+                <div class="balance-amount liabilities-amount">RM 200,993,970</div>
+                
+                <div class="section-content" id="current-liabilities-section">
+                    <!-- Current Liabilities Category -->
+                    <div class="asset-category">
+                        
+                        <!-- Payables -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('l03-content')">
+                                <div class="item-code">L03</div>
+                                <div class="item-name">Payables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-content">
+                            
+                            <!-- Trade Payables -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-1-content')">
+                                <div class="item-code">L03-1</div>
+                                <div class="item-name">Trade Payables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-1-content">
+                                <!-- Trade Payables Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">TP-1</div>
+                                    <div class="item-name">Trade Creditors Oil & Gas</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">TP-2</div>
+                                    <div class="item-name">Trade Creditors Civil</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">TP-3</div>
+                                    <div class="item-name">Trade Debtors - Civil</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Other Payables -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-2-content')">
+                                <div class="item-code">L03-2</div>
+                                <div class="item-name">Other Payables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-2-content">
+                                <!-- Other Payables Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-1</div>
+                                    <div class="item-name">Other Creditors</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-2</div>
+                                    <div class="item-name">Bank Rakyat Malaysia Berhad</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-3</div>
+                                    <div class="item-name">Provision Project Cost-Civil</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-4</div>
+                                    <div class="item-name">AMB Sport Club</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-5</div>
+                                    <div class="item-name">Amanah Saham Malaysia Berhad</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-6</div>
+                                    <div class="item-name">Lembaga Urusan Tabung Haji Malaysia Berhad</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-7</div>
+                                    <div class="item-name">Toyota Capital Malaysia Sdn Bhd (200010152730G) W5688H</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-8</div>
+                                    <div class="item-name">Pejabat Tenaga Kerja Kuantan</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-9</div>
+                                    <div class="item-name">RHB ( 2060-1200-131162 )</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-10</div>
+                                    <div class="item-name">Interest Accrued</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-11</div>
+                                    <div class="item-name">Attributable Profit - Civil</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-12</div>
+                                    <div class="item-name">Gases Stock</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-13</div>
+                                    <div class="item-name">Oil & Gas (WIP)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OP-14</div>
+                                    <div class="item-name">Civil Division</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Payable for Acquisition Of Industrial Land -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-3-content')">
+                                <div class="item-code">L03-3</div>
+                                <div class="item-name">Payable for Acquisition Of Industrial Land</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-3-content">
+                                <!-- Payable for Acquisition Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">PKNP-1</div>
+                                    <div class="item-name">PKNP-Land</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">PKNP-2</div>
+                                    <div class="item-name">PKNP Land</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Deposit Payables -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-4-content')">
+                                <div class="item-code">L03-4</div>
+                                <div class="item-name">Deposit Payables</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-4-content">
+                                <!-- Deposit Payables Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">DP-1</div>
+                                    <div class="item-name">Deposit Payables</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Accruals -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-5-content')">
+                                <div class="item-code">L03-5</div>
+                                <div class="item-name">Accruals</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-5-content">
+                                <!-- Accruals Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-1</div>
+                                    <div class="item-name">Accrual - Yayasan Pembangunan Ehwal Islam Malaysia</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-2</div>
+                                    <div class="item-name">Accrual - Taxation Dato Md Sharif</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-3</div>
+                                    <div class="item-name">Accrual - Taxation Dato' Sharifah</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-4</div>
+                                    <div class="item-name">Accrual - EPF Payable</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-5</div>
+                                    <div class="item-name">Accrual - Socso Payable</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-6</div>
+                                    <div class="item-name">Accrual - IRB - Deduction Tax Schedule PCB</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-7</div>
+                                    <div class="item-name">Accrual - Salary</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-8</div>
+                                    <div class="item-name">Accrual - Foreign Worker Saving</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-9</div>
+                                    <div class="item-name">Accrual - Takaful Insurans Payable</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-10</div>
+                                    <div class="item-name">Accrual - HRDF (Provision & Accrual)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-11</div>
+                                    <div class="item-name">Other Accrual</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-12</div>
+                                    <div class="item-name">Accrual Zakat (Provision & Accrual)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">ACC-13</div>
+                                    <div class="item-name">Accrual - SOCSO Employee Insurance Scheme Payable EIS</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Amount Due To Subsidiaries -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-6-content')">
+                                <div class="item-code">L03-6</div>
+                                <div class="item-name">Amount Due To Subsidiaries</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-6-content">
+                                <!-- Amount Due To Subsidiaries Items - Empty as per image -->
+                            </div>
+                            
+                            <!-- Amount Due To Directors -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-7-content')">
+                                <div class="item-code">L03-7</div>
+                                <div class="item-name">Amount Due To Directors</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-7-content">
+                                <!-- Amount Due To Directors Items - Empty as per image -->
+                            </div>
+                            
+                            <!-- Amount Due To Shareholders -->
+                            <div class="subcategory-item sub-item" onclick="toggleAssetSection('l03-8-content')">
+                                <div class="item-code">L03-8</div>
+                                <div class="item-name">Amount Due To Shareholders</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l03-8-content">
+                                <!-- Amount Due To Shareholders Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">SH-1</div>
+                                    <div class="item-name">Amount Owing to Dato' Sri Sharif Shamsuddin</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">SH-2</div>
+                                    <div class="item-name">Amount Owing to - RHB Bank Credit Card (51574000405560O)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">SH-3</div>
+                                    <div class="item-name">Amount Owing to Dato' Sharifah Fatimah</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Current Tax Liabilities -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('l04-content')">
+                                <div class="item-code">L04</div>
+                                <div class="item-name">Current Tax Liabilities</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l04-content">
+                                <!-- Current Tax Liabilities Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">TL-1</div>
+                                    <div class="item-name">CTL Taxation</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">TL-1</div>
+                                    <div class="item-name">Taxation</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bank Overdraft -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('l05-content')">
+                                <div class="item-code">L05</div>
+                                <div class="item-name">Bank Overdraft</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="l05-content">
+                                <!-- Bank Overdraft Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OD-1</div>
+                                    <div class="item-name">CIMB - Property Financing Loan FLEXI (6005326725)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OD-2</div>
+                                    <div class="item-name">CIMB - Civil Project (0601-0725507-05-8)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OD-3</div>
+                                    <div class="item-name">BIMB - Current Account - Jin Mahkota (06019-01007054-3)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OD-4</div>
+                                    <div class="item-name">Standard Chartered Bank Berhad (765-1-1743504-9)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OD-5</div>
+                                    <div class="item-name">HSBC (362-260556101)</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">OD-6</div>
+                                    <div class="item-name">Hong Leong Bank ( 2710-90197750 )</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- EQUITY Card -->
+            <div class="balance-card equity">
+                <div class="breakdown-header equity-header">
+                    <h3>EQUITY</h3>
+                    <div class="toggle-arrow" onclick="toggleSection('equity-section')">▼</div>
+                </div>
+                <div class="balance-amount equity-amount">-RM 51,826,074</div>
+                
+                <div class="section-content" id="equity-section">
+                    <!-- Equity Category -->
+                    <div class="asset-category">
+                        
+                        <!-- Capital and Reserves -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('re01-content')">
+                                <div class="item-code">RE01</div>
+                                <div class="item-name">Share Capital</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="re01-content">
+                                <!-- Share Capital Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">SC-1</div>
+                                    <div class="item-name">Share Capital - Dato' Md Sharif Shamsuddin</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">SC-2</div>
+                                    <div class="item-name">Share Capital - Dato' Sharifah Fatimah</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Revaluation Reserve -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('re02-content')">
+                                <div class="item-code">RE02</div>
+                                <div class="item-name">Revaluation Reserve</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="re02-content">
+                                <!-- Revaluation Reserve Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">RR-1</div>
+                                    <div class="item-name">Revaluation Reserved</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Retained Earnings -->
+                        <div class="asset-subcategory">
+                            <div class="subcategory-item main-item" onclick="toggleAssetSection('re03-content')">
+                                <div class="item-code">RE03</div>
+                                <div class="item-name">Retained Earnings</div>
+                                <div class="item-amount">RM 0</div>
+                            </div>
+                            
+                            <div class="asset-content" id="re03-content">
+                                <!-- Retained Earnings Items -->
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">RE03-1</div>
+                                    <div class="item-name">CURRENT PROFIT</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                                
+                                <div class="subcategory-item detail-item">
+                                    <div class="item-code">RE03-2</div>
+                                    <div class="item-name">PREVIOUS PROFIT</div>
+                                    <div class="item-amount">RM 0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon icon-dashboard"></div>
+                    <div class="nav-label">Dashboard</div>
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <div class="nav-icon icon-properties"></div>
+                    <div class="nav-label">Properties</div>
+                </a>
+                <a href="financial.html" class="nav-item active">
+                    <div class="nav-icon icon-financial"></div>
+                    <div class="nav-label">Financial</div>
+                </a>
+                <a href="tenant.html" class="nav-item">
+                    <div class="nav-icon icon-tenants"></div>
+                    <div class="nav-label">Tenants</div>
+                </a>
+                <a href="reportview.html" class="nav-item">
+                    <div class="nav-icon icon-reports">≡</div>
+                    <div class="nav-label">Report</div>
+                </a>
+                <a href="setting.html" class="nav-item">
+                    <div class="nav-icon icon-settings">⚙</div>
+                    <div class="nav-label">Settings</div>
+                </a>
+            </div>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Add haptic feedback if supported
+                    if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                    }
+                });
+            });
+
+            // Mobile-optimized interactions
+            function initializeMobileOptimizations() {
+                // Prevent zoom on double tap
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+
+                // Add smooth scrolling for mobile
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // Add haptic feedback for navigation
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('touchstart', function() {
+                        // Add visual feedback
+                        this.style.transform = 'scale(0.95)';
+                        
+                        // Vibrate if supported
+                        if (navigator.vibrate) {
+                            navigator.vibrate(10);
+                        }
+                    });
+                    
+                    item.addEventListener('touchend', function() {
+                        // Reset visual feedback
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    });
+                });
+                
+            }
+
+            // Initialize mobile optimizations
+            initializeMobileOptimizations();
+        });
+
+        // Toggle section function for asset breakdown
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const arrow = document.querySelector(`[onclick="toggleSection('${sectionId}')"]`);
+            
+            if (section.style.display === 'none' || section.style.display === '') {
+                section.style.display = 'block';
+                arrow.textContent = '▼';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                section.style.display = 'none';
+                arrow.textContent = '▶';
+                arrow.style.transform = 'rotate(-90deg)';
+            }
+            
+            // Add haptic feedback if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }
+
+        // Toggle asset section function for collapsible asset categories
+        function toggleAssetSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const parentCard = section.closest('.asset-subcategory');
+            
+            if (section.style.display === 'none' || section.style.display === '') {
+                section.style.display = 'block';
+                if (parentCard) {
+                    parentCard.classList.add('expanded');
+                }
+            } else {
+                section.style.display = 'none';
+                if (parentCard) {
+                    parentCard.classList.remove('expanded');
+                }
+            }
+            
+            // Add haptic feedback if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }
+    </script>
+</body>
+</html>

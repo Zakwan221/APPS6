@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Reports - Asturi Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile App Container */
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media screen and (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .main-content {
+                padding: 0 16px 100px 16px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 0 12px 100px 12px;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: left;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px 100px 20px;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            background: #e5e7eb;
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            min-width: 80px;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #1f2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button:hover {
+            color: #1f2937;
+        }
+
+        /* Financial Cards */
+        .financial-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .financial-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .financial-card-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .financial-card-amount {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .revenue-amount {
+            color: #3b82f6;
+        }
+
+        .profit-amount {
+            color: #3b82f6;
+        }
+
+        /* Revenue Breakdown Section */
+        .revenue-breakdown {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .revenue-breakdown::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .revenue-breakdown:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .revenue-breakdown:hover::before {
+            opacity: 1;
+        }
+
+        .breakdown-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 0;
+            border-radius: 12px;
+            letter-spacing: -0.025em;
+            position: relative;
+        }
+
+        .breakdown-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, #6366f1, transparent);
+            opacity: 0.3;
+        }
+
+        .breakdown-title:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            padding: 12px 16px;
+            transform: translateX(4px);
+        }
+
+        .master-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            color: #6b7280;
+            transition: all 0.3s ease;
+        }
+
+        .master-toggle:hover {
+            color: #dc2626;
+        }
+
+        .master-arrow {
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .master-arrow.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .rental-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 64px;
+            position: relative;
+        }
+
+        .rental-item:last-child {
+            border-bottom: none;
+        }
+
+        .rental-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            right: -20px;
+            top: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .rental-item:hover::before {
+            opacity: 1;
+        }
+
+        .rental-item:hover {
+            transform: translateX(4px);
+        }
+
+        .rental-info {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0;
+            margin-right: 16px;
+        }
+
+        .rental-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .rental-item:hover .rental-name {
+            color: #6366f1;
+        }
+
+        .rental-code {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .rental-amount {
+            font-size: 16px;
+            font-weight: 700;
+            color: #3b82f6;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .cost-amount {
+            color: #dc2626 !important;
+        }
+
+        /* Section Headers */
+        .breakdown-section {
+            margin-bottom: 32px;
+        }
+
+        .expense-section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .section-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-header:hover::before {
+            left: 100%;
+        }
+
+        .section-header:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .revenue-header {
+            background: #3b82f6;
+        }
+
+        .cost-header {
+            background: #10b981;
+        }
+
+        .expense-header {
+            background: #dc2626;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .toggle-arrow {
+            font-size: 12px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .toggle-arrow.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+        }
+
+        .expense-amount {
+            color: #dc2626 !important;
+        }
+
+        /* Financial Overview Chart */
+        .financial-chart-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .financial-chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .financial-chart-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .financial-chart-card:hover::before {
+            opacity: 1;
+        }
+
+        .chart-header {
+            margin-bottom: 28px;
+        }
+
+        .chart-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 0;
+            border-radius: 12px;
+            letter-spacing: -0.025em;
+            position: relative;
+        }
+
+        .chart-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, #6366f1, transparent);
+            opacity: 0.3;
+        }
+
+        .chart-title:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            padding: 12px 16px;
+            transform: translateX(4px);
+        }
+
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 240px;
+            padding: 0 40px;
+            position: relative;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            flex: 0 0 auto;
+            width: 90px;
+        }
+
+        .chart-bar {
+            width: 60px;
+            height: 180px;
+            background: #f9fafb;
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .chart-bar:hover {
+            transform: scale(1.02);
+        }
+
+        .bar-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0;
+            transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fillUp 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fillUp {
+            from { height: 0%; }
+            to { height: var(--final-height, 100%); }
+        }
+
+        .revenue-bar-fill {
+            background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+        }
+
+        .cost-bar-fill {
+            background: linear-gradient(180deg, #10b981, #059669);
+        }
+
+        .expense-bar-fill {
+            background: linear-gradient(180deg, #dc2626, #b91c1c);
+        }
+
+        .bar-info {
+            text-align: center;
+        }
+
+        .bar-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #9ca3af;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bar-amount {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+
+        /* Responsive chart */
+        @media screen and (max-width: 480px) {
+            .financial-chart-card {
+                padding: 24px 16px;
+                margin-bottom: 16px;
+            }
+            
+            .chart-header {
+                margin-bottom: 24px;
+            }
+            
+            .chart-bars {
+                height: 200px;
+                padding: 0 20px;
+                justify-content: space-around;
+            }
+            
+            .chart-bar {
+                width: 50px;
+                height: 140px;
+            }
+            
+            .chart-bar-group {
+                width: 75px;
+                gap: 16px;
+            }
+            
+            .chart-title {
+                font-size: 20px;
+            }
+            
+            .chart-subtitle {
+                font-size: 13px;
+            }
+            
+            .bar-label {
+                font-size: 10px;
+            }
+            
+            .bar-amount {
+                font-size: 12px;
+            }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            padding: 8px 0 20px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Enhanced Mobile Navigation */
+        @media screen and (max-width: 480px) {
+            .bottom-nav {
+                padding: 6px 0 16px 0;
+            }
+            
+            .nav-items {
+                padding: 0 12px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                min-width: 60px;
+                border-radius: 12px;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-item:active {
+                transform: scale(0.95);
+                background: rgba(59, 130, 246, 0.1);
+            }
+            
+            .nav-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #6b7280;
+            transition: all 0.2s ease;
+        }
+
+        .icon-dashboard::before {
+            content: '⊞';
+        }
+
+        .icon-properties::before {
+            content: '⌂';
+        }
+
+        .icon-financial::before {
+            content: '$';
+        }
+
+        .icon-tenants::before {
+            content: 'U';
+        }
+
+        .icon-settings {
+            background: #e5e7eb;
+            border-radius: 4px;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nav-item.active .icon-dashboard,
+        .nav-item.active .icon-financial,
+        .nav-item.active .icon-tenants,
+        .nav-item.active .icon-properties,
+        .nav-item.active .icon-settings {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
+            margin: 8px auto 0 auto;
+            opacity: 0.3;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .financial-card,
+        .revenue-breakdown {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .financial-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .rental-item {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .rental-item:nth-child(2) { animation-delay: 0.1s; }
+        .rental-item:nth-child(3) { animation-delay: 0.2s; }
+        .rental-item:nth-child(4) { animation-delay: 0.3s; }
+        .rental-item:nth-child(5) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Financial Reports</h1>
+            <p>Comprehensive financial overview</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-button active">P&L</button>
+                <button class="tab-button" onclick="window.location.href='Balance.html'">Balance</button>
+                <button class="tab-button" onclick="window.location.href='cashflow.html'">Cash Flow</button>
+            </div>
+
+        <!-- Financial Overview Chart -->
+        <div class="financial-chart-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Financial Overview</h3>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-bars">
+                    <div class="chart-bar-group">
+                        <div class="chart-bar revenue-bar">
+                            <div class="bar-fill revenue-bar-fill" style="height: 100%;"></div>
+                        </div>
+                        <div class="bar-info">
+                            <div class="bar-label">Revenue</div>
+                            <div class="bar-amount">RM 388K</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-bar-group">
+                        <div class="chart-bar cost-bar">
+                            <div class="bar-fill cost-bar-fill" style="height: 30%;"></div>
+                        </div>
+                        <div class="bar-info">
+                            <div class="bar-label">COS</div>
+                            <div class="bar-amount">RM 118K</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-bar-group">
+                        <div class="chart-bar expense-bar">
+                            <div class="bar-fill expense-bar-fill" style="height: 45%;"></div>
+                        </div>
+                        <div class="bar-info">
+                            <div class="bar-label">Expenses</div>
+                            <div class="bar-amount">RM 175K</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+
+            <!-- Revenue Breakdown -->
+            <div class="revenue-breakdown">
+                <h2 class="breakdown-title">Revenue</h2>
+                <div class="section-header revenue-header" onclick="toggleSection('revenue-section')">
+                    <h3 class="section-title">
+                        RENTAL INCOME
+                        <span class="toggle-arrow" id="revenue-arrow">▼</span>
+                    </h3>
+                </div>
+                <div class="section-content" id="revenue-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Lot 74-A, Gebeng</div>
+                            <div class="rental-code">R01</div>
+                        </div>
+                        <div class="rental-amount">RM 45,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Lot 3/129, Gebeng</div>
+                            <div class="rental-code">R02</div>
+                        </div>
+                        <div class="rental-amount">RM 62,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Land, Gebeng</div>
+                            <div class="rental-code">R03</div>
+                        </div>
+                        <div class="rental-amount">RM 38,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Bangi</div>
+                            <div class="rental-code">R04</div>
+                        </div>
+                        <div class="rental-amount">RM 52,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Jalan Kuching - Blok 3</div>
+                            <div class="rental-code">R05</div>
+                        </div>
+                        <div class="rental-amount">RM 35,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Jateng Kuching - Blok 3A</div>
+                            <div class="rental-code">R06</div>
+                        </div>
+                        <div class="rental-amount">RM 28,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Short Term Rental</div>
+                            <div class="rental-code">R07</div>
+                        </div>
+                        <div class="rental-amount">RM 42,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental of Equipment</div>
+                            <div class="rental-code">R08</div>
+                        </div>
+                        <div class="rental-amount">RM 25,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Others</div>
+                            <div class="rental-code">R09</div>
+                        </div>
+                        <div class="rental-amount">RM 18,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost of Sales Breakdown -->
+            <div class="revenue-breakdown">
+                <h2 class="breakdown-title">Cost of Sales</h2>
+                <div class="section-header cost-header" onclick="toggleSection('cost-section')">
+                    <h3 class="section-title">
+                        RENTAL COST OF SALES
+                        <span class="toggle-arrow" id="cost-arrow">▼</span>
+                    </h3>
+                </div>
+                <div class="section-content" id="cost-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Lot 74-A, Gebeng</div>
+                            <div class="rental-code">CS01</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 15,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Lot 3/129, Gebeng</div>
+                            <div class="rental-code">CS02</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 18,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Land, Gebeng</div>
+                            <div class="rental-code">CS03</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 12,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Bangi</div>
+                            <div class="rental-code">CS04</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 16,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Jalan Kuching - Blok 3</div>
+                            <div class="rental-code">CS05</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 11,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Jateng Kuching - Blok 3A</div>
+                            <div class="rental-code">CS06</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 9,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Short Term Rental</div>
+                            <div class="rental-code">CS07</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 14,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental of Equipment</div>
+                            <div class="rental-code">CS08</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 8,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Rental Others</div>
+                            <div class="rental-code">CS09</div>
+                        </div>
+                        <div class="rental-amount cost-amount">RM 6,000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expenses Breakdown -->
+            <div class="revenue-breakdown">
+                <h2 class="breakdown-title" onclick="toggleAllExpenses()">
+                    <span>Expenses</span>
+                    <div class="master-toggle">
+                        <span>Collapse All</span>
+                        <span class="master-arrow" id="master-expenses-arrow">▼</span>
+                    </div>
+                </h2>
+                
+                <!-- Salary Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('salary-section')">
+                        <h3 class="section-title">
+                            SALARY
+                            <span class="toggle-arrow" id="salary-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="salary-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Salary</div>
+                            <div class="rental-code">E01-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 25,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">EPF</div>
+                            <div class="rental-code">E01-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">PERKESO</div>
+                            <div class="rental-code">E01-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">HRDF</div>
+                            <div class="rental-code">E01-4</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 200</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Staff Insurance</div>
+                            <div class="rental-code">E01-5</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Parttime allowance</div>
+                            <div class="rental-code">E01-6</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Contract worker cleaning</div>
+                            <div class="rental-code">E01-7</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,000</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Salary Expenses Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('salary-expenses-section')">
+                        <h3 class="section-title">
+                            SALARY EXPENSES
+                            <span class="toggle-arrow" id="salary-expenses-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="salary-expenses-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Tabung Haji</div>
+                            <div class="rental-code">E02-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 300</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Zakat</div>
+                            <div class="rental-code">E02-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 400</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">PCB</div>
+                            <div class="rental-code">E02-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,200</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">House Rental</div>
+                            <div class="rental-code">E02-4</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Foreign worker saving</div>
+                            <div class="rental-code">E02-5</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 600</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Utilities Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('utilities-section')">
+                        <h3 class="section-title">
+                            UTILITIES
+                            <span class="toggle-arrow" id="utilities-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="utilities-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Electricity</div>
+                            <div class="rental-code">E03-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Water</div>
+                            <div class="rental-code">E03-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 600</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Telephone</div>
+                            <div class="rental-code">E03-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 400</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Internet</div>
+                            <div class="rental-code">E03-4</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 300</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Maintenance and Purchase Order Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('maintenance-section')">
+                        <h3 class="section-title">
+                            MAINTENANCE AND PURCHASE ORDER (PO)
+                            <span class="toggle-arrow" id="maintenance-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="maintenance-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Building - Lot 74-A Office + Factory 1-13</div>
+                            <div class="rental-code">E04-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Building - Lot 3/129</div>
+                            <div class="rental-code">E04-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Building - Lot 55/129 (Kuang 8)</div>
+                            <div class="rental-code">E04-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,200</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Building - Boulevard Business Park, Jalan Kuching</div>
+                            <div class="rental-code">E04-4</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 4,200</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Building - Plaza Pentagon Point, Bangi</div>
+                            <div class="rental-code">E04-5</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Vehicle Repair & Maintenance</div>
+                            <div class="rental-code">E04-6</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,500</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Cukai Tanah & Cukai Taksiran Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('cukai-section')">
+                        <h3 class="section-title">
+                            CUKAI TANAH & CUKAI TAKSIRAN
+                            <span class="toggle-arrow" id="cukai-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="cukai-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Cukai Tanah</div>
+                            <div class="rental-code">E05-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,200</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Cukai Taksiran</div>
+                            <div class="rental-code">E05-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 800</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Purchasing Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('purchasing-section')">
+                        <h3 class="section-title">
+                            PURCHASING
+                            <span class="toggle-arrow" id="purchasing-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="purchasing-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Asset</div>
+                            <div class="rental-code">E06-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 5,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Office support materials</div>
+                            <div class="rental-code">E06-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Petrol & diesel</div>
+                            <div class="rental-code">E06-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,200</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Insurance Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('insurance-section')">
+                        <h3 class="section-title">
+                            INSURANCE
+                            <span class="toggle-arrow" id="insurance-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="insurance-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Vehicle</div>
+                            <div class="rental-code">E07-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,400</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Facilities</div>
+                            <div class="rental-code">E07-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Building</div>
+                            <div class="rental-code">E07-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,600</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Staff Expenses Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('staff-expenses-section')">
+                        <h3 class="section-title">
+                            STAFF EXPENSES
+                            <span class="toggle-arrow" id="staff-expenses-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="staff-expenses-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Travelling</div>
+                            <div class="rental-code">E08-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Medical</div>
+                            <div class="rental-code">E08-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,200</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- IT & Consultancy Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('it-consultancy-section')">
+                        <h3 class="section-title">
+                            IT & CONSULTANCY
+                            <span class="toggle-arrow" id="it-consultancy-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="it-consultancy-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Hong Chambers (TT Dotcom)</div>
+                            <div class="rental-code">E09-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,000</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">LHDN</div>
+                            <div class="rental-code">E09-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 800</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Rental Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('rental-section')">
+                        <h3 class="section-title">
+                            RENTAL
+                            <span class="toggle-arrow" id="rental-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="rental-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">House Rental - Touch Millennium (No. 148)</div>
+                            <div class="rental-code">E10-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 4,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Warehouse Lebuhan</div>
+                            <div class="rental-code">E10-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Others</div>
+                            <div class="rental-code">E10-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,200</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Project Expenses Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('project-expenses-section')">
+                        <h3 class="section-title">
+                            PROJECT EXPENSES
+                            <span class="toggle-arrow" id="project-expenses-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="project-expenses-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Project Expense 1</div>
+                            <div class="rental-code">E11-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 5,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Project Expense 2</div>
+                            <div class="rental-code">E11-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,800</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Advance / Loan from Director Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('advance-loan-section')">
+                        <h3 class="section-title">
+                            ADVANCE / LOAN FROM DIRECTOR
+                            <span class="toggle-arrow" id="advance-loan-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="advance-loan-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Dato Sri Md Sharif Shamsudin</div>
+                            <div class="rental-code">E12-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 15,000</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Corporate Social Responsibility Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('csr-section')">
+                        <h3 class="section-title">
+                            CORPORATE SOCIAL RESPONSIBILITY
+                            <span class="toggle-arrow" id="csr-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="csr-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Suruhan</div>
+                            <div class="rental-code">E13-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Wakaf</div>
+                            <div class="rental-code">E13-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,200</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Zakat</div>
+                            <div class="rental-code">E13-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,500</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Secretarial Fee Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('secretarial-section')">
+                        <h3 class="section-title">
+                            SECRETARIAL FEE
+                            <span class="toggle-arrow" id="secretarial-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="secretarial-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Secretarial -MX Corporate Services</div>
+                            <div class="rental-code">E14-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,400</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Annual Return</div>
+                            <div class="rental-code">E14-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 600</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Others</div>
+                            <div class="rental-code">E14-3</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 400</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Accounting Preparation Fee Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('accounting-section')">
+                        <h3 class="section-title">
+                            ACCOUNTING PREPARATION FEE
+                            <span class="toggle-arrow" id="accounting-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="accounting-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Profin Advisors sdn bhd</div>
+                            <div class="rental-code">E15-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,600</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Audit Fee Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('audit-section')">
+                        <h3 class="section-title">
+                            AUDIT FEE
+                            <span class="toggle-arrow" id="audit-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="audit-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Ashari Cheong</div>
+                            <div class="rental-code">E16-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 4,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Jamal Amin & Partners</div>
+                            <div class="rental-code">E16-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,200</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Tax Fee Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('tax-section')">
+                        <h3 class="section-title">
+                            TAX FEE
+                            <span class="toggle-arrow" id="tax-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="tax-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">AC Taxation</div>
+                            <div class="rental-code">E17-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 2,800</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Jamal Amin & Partners</div>
+                            <div class="rental-code">E17-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,900</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Depreciation Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('depreciation-section')">
+                        <h3 class="section-title">
+                            DEPRECIATION
+                            <span class="toggle-arrow" id="depreciation-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="depreciation-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Depreciation Expense 1</div>
+                            <div class="rental-code">E18-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 8,500</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Depreciation Expense 2</div>
+                            <div class="rental-code">E18-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 6,200</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Interest Charges Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('interest-section')">
+                        <h3 class="section-title">
+                            INTEREST CHARGES
+                            <span class="toggle-arrow" id="interest-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="interest-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">BIMB Interest</div>
+                            <div class="rental-code">E19-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 3,400</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Bank charges</div>
+                            <div class="rental-code">E19-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 1,100</div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Penalty / Late Charges Section -->
+                <div class="expense-section">
+                    <div class="section-header expense-header" onclick="toggleSection('penalty-section')">
+                        <h3 class="section-title">
+                            PENALTY / LATE CHARGES
+                            <span class="toggle-arrow" id="penalty-arrow">▼</span>
+                        </h3>
+                    </div>
+                    <div class="section-content" id="penalty-section">
+                    
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Penalty / Late Charges</div>
+                            <div class="rental-code">E20-1</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 750</div>
+                    </div>
+
+                    <div class="rental-item">
+                        <div class="rental-info">
+                            <div class="rental-name">Additional Penalties</div>
+                            <div class="rental-code">E20-2</div>
+                        </div>
+                        <div class="rental-amount expense-amount">RM 450</div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon icon-dashboard"></div>
+                    <div class="nav-label">Dashboard</div>
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <div class="nav-icon icon-properties"></div>
+                    <div class="nav-label">Properties</div>
+                </a>
+                <a href="financial.html" class="nav-item active">
+                    <div class="nav-icon icon-financial"></div>
+                    <div class="nav-label">Financial</div>
+                </a>
+                <a href="tenant.html" class="nav-item">
+                    <div class="nav-icon icon-tenants"></div>
+                    <div class="nav-label">Tenants</div>
+                </a>
+                <a href="reportview.html" class="nav-item">
+                    <div class="nav-icon icon-reports">≡</div>
+                    <div class="nav-label">Report</div>
+                </a>
+                <a href="setting.html" class="nav-item">
+                    <div class="nav-icon icon-settings">⚙</div>
+                    <div class="nav-label">Settings</div>
+                </a>
+            </div>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Add haptic feedback if supported
+                    if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                    }
+                });
+            });
+
+            // Mobile-optimized interactions
+            function initializeMobileOptimizations() {
+                // Prevent zoom on double tap
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+
+                // Add smooth scrolling for mobile
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // Add haptic feedback for navigation
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    item.addEventListener('touchstart', function() {
+                        // Add visual feedback
+                        this.style.transform = 'scale(0.95)';
+                        this.style.background = 'rgba(59, 130, 246, 0.1)';
+                        
+                        // Vibrate if supported
+                        if (navigator.vibrate) {
+                            navigator.vibrate(10);
+                        }
+                    });
+                    
+                    item.addEventListener('touchend', function() {
+                        // Reset visual feedback
+                        setTimeout(() => {
+                            this.style.transform = '';
+                            this.style.background = '';
+                        }, 150);
+                    });
+                });
+                
+            }
+
+            // Initialize mobile optimizations
+            initializeMobileOptimizations();
+        });
+
+        // Toggle section function
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const arrowId = sectionId.replace('-section', '-arrow');
+            const arrow = document.getElementById(arrowId);
+            
+            if (section.classList.contains('collapsed')) {
+                section.classList.remove('collapsed');
+                arrow.classList.remove('collapsed');
+                arrow.textContent = '▼';
+            } else {
+                section.classList.add('collapsed');
+                arrow.classList.add('collapsed');
+                arrow.textContent = '▶';
+            }
+            
+            // Add haptic feedback if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(5);
+            }
+        }
+
+        // Toggle all expenses function
+        function toggleAllExpenses() {
+            const masterArrow = document.getElementById('master-expenses-arrow');
+            const masterToggleText = document.querySelector('.master-toggle span');
+            
+            // Get all expense sections
+            const expenseSections = [
+                'salary-section', 'salary-expenses-section', 'utilities-section', 
+                'maintenance-section', 'cukai-section', 'purchasing-section', 
+                'insurance-section', 'staff-expenses-section', 'it-consultancy-section', 
+                'rental-section', 'project-expenses-section', 'advance-loan-section', 
+                'csr-section', 'secretarial-section', 'accounting-section', 
+                'audit-section', 'tax-section', 'depreciation-section', 
+                'interest-section', 'penalty-section'
+            ];
+            
+            const isCollapsed = masterArrow.classList.contains('collapsed');
+            
+            expenseSections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                const arrowId = sectionId.replace('-section', '-arrow');
+                const arrow = document.getElementById(arrowId);
+                
+                if (section && arrow) {
+                    if (isCollapsed) {
+                        // Expand all
+                        section.classList.remove('collapsed');
+                        arrow.classList.remove('collapsed');
+                        arrow.textContent = '▼';
+                    } else {
+                        // Collapse all
+                        section.classList.add('collapsed');
+                        arrow.classList.add('collapsed');
+                        arrow.textContent = '▶';
+                    }
+                }
+            });
+            
+            // Toggle master arrow and text
+            if (isCollapsed) {
+                masterArrow.classList.remove('collapsed');
+                masterArrow.textContent = '▼';
+                masterToggleText.textContent = 'Collapse All';
+            } else {
+                masterArrow.classList.add('collapsed');
+                masterArrow.textContent = '▶';
+                masterToggleText.textContent = 'Expand All';
+            }
+            
+            // Add haptic feedback if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(15);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Asturi Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile App Container */
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media screen and (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .main-content {
+                padding: 0 16px 100px 16px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 0 12px 100px 12px;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #000;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 0 20px 100px 20px;
+        }
+
+        /* Settings Sections */
+        .settings-section {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px 20px 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:hover {
+            background: #f8fafc;
+        }
+
+        .settings-item:active {
+            background: #f1f5f9;
+        }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+
+        .item-description {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .item-value {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+            margin-left: 12px;
+        }
+
+        .item-arrow {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-left: 12px;
+        }
+
+        /* Icon Colors */
+        .icon-profile {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .icon-company {
+            background: #059669;
+            color: white;
+        }
+
+        .icon-version {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .icon-notifications {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .icon-security {
+            background: #ef4444;
+            color: white;
+        }
+
+        .icon-privacy {
+            background: #06b6d4;
+            color: white;
+        }
+
+        .icon-support {
+            background: #84cc16;
+            color: white;
+        }
+
+        .icon-logout {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-left: 12px;
+        }
+
+        .toggle-switch.active {
+            background: #3b82f6;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Company Info Card */
+        .company-card {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 16px auto;
+        }
+
+        .company-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .company-tagline {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Logout Button */
+        .logout-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .logout-button:hover {
+            background: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        .logout-button:active {
+            transform: translateY(0);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            padding: 8px 0 20px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #666;
+            transition: color 0.2s ease;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .icon-settings {
+            background: #3b82f6;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
+            margin: 8px auto 0 auto;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+
+        .modal-message {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-button.primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .modal-button.primary:hover {
+            background: #2563eb;
+        }
+
+        .modal-button.secondary {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .modal-button.secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 480px) {
+            .bottom-nav {
+                padding: 6px 0 16px 0;
+            }
+            
+            .nav-items {
+                padding: 0 12px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                min-width: 60px;
+                border-radius: 12px;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-item:active {
+                transform: scale(0.95);
+                background: rgba(59, 130, 246, 0.1);
+            }
+            
+            .nav-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+            
+            .home-indicator {
+                width: 120px;
+                height: 4px;
+                margin: 6px auto 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button" onclick="goBack()">←</button>
+            <h1>Settings</h1>
+            <p>ASTURI RESOURCES SDN BHD</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Company Information -->
+            <div class="company-card">
+                <div class="company-name">ASTURI RESOURCES SDN BHD</div>
+                <div class="company-tagline">Property Management System</div>
+            </div>
+
+            <!-- App Information -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-title">App Information</div>
+                    <div class="section-subtitle">Application details and version</div>
+                </div>
+                
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">App Version</div>
+                        <div class="item-description">Current application version</div>
+                    </div>
+                    <div class="item-value">v2.1.0</div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Company Name</div>
+                        <div class="item-description">ASTURI RESOURCES SDN BHD</div>
+                    </div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Last Updated</div>
+                        <div class="item-description">Application last update date</div>
+                    </div>
+                    <div class="item-value">Dec 2024</div>
+                </div>
+            </div>
+
+            <!-- User Profile -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-title">User Profile</div>
+                    <div class="section-subtitle">Manage your account settings</div>
+                </div>
+                
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Profile Information</div>
+                        <div class="item-description">Update your personal details</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Change Password</div>
+                        <div class="item-description">Update your account password</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-title">Notifications</div>
+                    <div class="section-subtitle">Manage notification preferences</div>
+                </div>
+                
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Push Notifications</div>
+                        <div class="item-description">Receive notifications on your device</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Email Notifications</div>
+                        <div class="item-description">Receive email updates</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Financial Alerts</div>
+                        <div class="item-description">Get notified about financial updates</div>
+                    </div>
+                    <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                </div>
+            </div>
+
+            <!-- Privacy & Security -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-title">Privacy & Security</div>
+                    <div class="section-subtitle">Control your privacy settings</div>
+                </div>
+                
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Privacy Policy</div>
+                        <div class="item-description">View our privacy policy</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Security Settings</div>
+                        <div class="item-description">Manage security preferences</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Data Usage</div>
+                        <div class="item-description">View data usage statistics</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div class="settings-section">
+                <div class="section-header">
+                    <div class="section-title">Support</div>
+                    <div class="section-subtitle">Get help and support</div>
+                </div>
+                
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Help Center</div>
+                        <div class="item-description">Find answers to common questions</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Contact Support</div>
+                        <div class="item-description">Get in touch with our support team</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+
+                <div class="settings-item">
+                    <div class="item-content">
+                        <div class="item-title">Terms of Service</div>
+                        <div class="item-description">Read our terms and conditions</div>
+                    </div>
+                    <div class="item-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <button class="logout-button" onclick="showLogoutModal()">
+                Log Out
+            </button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon icon-dashboard">⊞</div>
+                    <div class="nav-label">Dashboard</div>
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <div class="nav-icon icon-properties">⌂</div>
+                    <div class="nav-label">Properties</div>
+                </a>
+                <a href="financial.html" class="nav-item">
+                    <div class="nav-icon icon-financial">$</div>
+                    <div class="nav-label">Financial</div>
+                </a>
+                <a href="tenant.html" class="nav-item">
+                    <div class="nav-icon icon-tenants">U</div>
+                    <div class="nav-label">Tenants</div>
+                </a>
+                <a href="reportview.html" class="nav-item">
+                    <div class="nav-icon icon-reports">≡</div>
+                    <div class="nav-label">Report</div>
+                </a>
+                <a href="setting.html" class="nav-item active">
+                    <div class="nav-icon icon-settings">⚙</div>
+                    <div class="nav-label">Settings</div>
+                </a>
+            </div>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal" id="logoutModal">
+        <div class="modal-content">
+            <div class="modal-title">Log Out</div>
+            <div class="modal-message">Are you sure you want to log out? You will need to sign in again to access your account.</div>
+            <div class="modal-buttons">
+                <button class="modal-button secondary" onclick="hideLogoutModal()">Cancel</button>
+                <button class="modal-button primary" onclick="confirmLogout()">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function goBack() {
+            window.history.back();
+        }
+
+        // Toggle switch functionality
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+            
+            // Add haptic feedback if supported
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+        }
+
+        // Modal functions
+        function showLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'block';
+        }
+
+        function hideLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        function confirmLogout() {
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('logoutModal');
+            if (event.target === modal) {
+                hideLogoutModal();
+            }
+        }
+
+        // Mobile optimizations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add touch feedback to settings items
+            const settingsItems = document.querySelectorAll('.settings-item');
+            settingsItems.forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                item.addEventListener('touchend', function() {
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Add haptic feedback to navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    if (navigator.vibrate) {
+                        navigator.vibrate(10);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

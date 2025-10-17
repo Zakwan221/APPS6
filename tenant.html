@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenants - Asturi Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Mobile App Container */
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Mobile Responsiveness */
+        @media screen and (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .main-content {
+                padding: 0 16px 100px 16px;
+            }
+            
+            .occupancy-card {
+                padding: 24px 20px;
+            }
+            
+            .chart-circle {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .chart-percentage {
+                font-size: 28px;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .main-content {
+                padding: 0 12px 100px 12px;
+            }
+            
+            .occupancy-card {
+                padding: 20px 16px;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: left;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 20px 20px 100px 20px;
+        }
+
+        /* Occupancy Section */
+        .occupancy-section {
+            margin-bottom: 24px;
+        }
+
+        .occupancy-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .occupancy-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .occupancy-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .occupancy-chart {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .circle-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .chart-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .occupancy-details {
+            margin-top: 16px;
+        }
+
+        .occupancy-text {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Statistics Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px auto;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.paid {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .stat-icon.unpaid {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .stat-number.paid {
+            color: #16a34a;
+        }
+
+        .stat-number.unpaid {
+            color: #dc2626;
+        }
+
+        /* Tenant List Section */
+        .tenant-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+
+        .tenant-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tenant-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .tenant-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tenant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .tenant-info {
+            flex: 1;
+        }
+
+        .tenant-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .tenant-unit {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.paid {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-badge.unpaid {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .tenant-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .detail-value.rent {
+            color: #059669;
+        }
+
+        .detail-value.expiry {
+            color: #dc2626;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            padding: 8px 0 20px 0;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Enhanced Mobile Navigation */
+        @media screen and (max-width: 480px) {
+            .bottom-nav {
+                padding: 6px 0 16px 0;
+            }
+            
+            .nav-items {
+                padding: 0 12px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+                min-width: 60px;
+                border-radius: 12px;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-item:active {
+                transform: scale(0.95);
+                background: rgba(59, 130, 246, 0.1);
+            }
+            
+            .nav-icon {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+            
+            .nav-label {
+                font-size: 9px;
+            }
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-item:hover {
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            color: #6b7280;
+            transition: all 0.2s ease;
+        }
+
+        .icon-dashboard::before {
+            content: '⊞';
+        }
+
+        .icon-properties::before {
+            content: '⌂';
+        }
+
+        .icon-financial::before {
+            content: '$';
+        }
+
+        .icon-tenants {
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+
+        .icon-settings {
+            background: #e5e7eb;
+            border-radius: 4px;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .nav-item.active .icon-dashboard,
+        .nav-item.active .icon-financial,
+        .nav-item.active .icon-tenants,
+        .nav-item.active .icon-properties,
+        .nav-item.active .icon-settings {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #000;
+            border-radius: 3px;
+            margin: 8px auto 0 auto;
+            opacity: 0.3;
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card, .tenant-section {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .tenant-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .tenant-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Tenants & Occupancy</h1>
+            <p>13 total tenants</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Occupancy Chart -->
+            <div class="occupancy-section">
+                <div class="occupancy-card">
+                    <h3 class="occupancy-title">Overall Occupancy</h3>
+                    
+                    <div class="occupancy-chart">
+                        <div class="chart-circle">
+                            <svg class="circle-svg" viewBox="0 0 120 120">
+                                <circle
+                                    cx="60"
+                                    cy="60"
+                                    r="50"
+                                    fill="none"
+                                    stroke="#e5e7eb"
+                                    stroke-width="8"
+                                />
+                                <circle
+                                    cx="60"
+                                    cy="60"
+                                    r="50"
+                                    fill="none"
+                                    stroke="#3b82f6"
+                                    stroke-width="8"
+                                    stroke-linecap="round"
+                                    stroke-dasharray="270 314"
+                                    stroke-dashoffset="0"
+                                    transform="rotate(-90 60 60)"
+                                />
+                            </svg>
+                            <div class="chart-percentage">86%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="occupancy-details">
+                        <span class="occupancy-text">132 / 153 units occupied</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon paid">👥</div>
+                    <div class="stat-label">Paid</div>
+                    <div class="stat-number paid">13</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon unpaid">👥</div>
+                    <div class="stat-label">Unpaid</div>
+                    <div class="stat-number unpaid">3</div>
+                </div>
+            </div>
+
+            <!-- Tenant List Section -->
+            <div class="tenant-section">
+                <h2 class="section-title">Tenant List</h2>
+                
+                <div class="tenant-list">
+                    <!-- Tenant 1 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Ahmad bin Ali</div>
+                                <div class="tenant-unit">R01 - Unit A1</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2500/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2024-12-31</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 2 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Siti Nurhaliza</div>
+                                <div class="tenant-unit">R01 - Unit A2</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2500/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2024-11-30</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 3 - Unpaid Example -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Muhammad Hassan</div>
+                                <div class="tenant-unit">R01 - Unit B1</div>
+                            </div>
+                            <div class="status-badge unpaid">UNPAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2300/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-01-15</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 4 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Fatimah Abdullah</div>
+                                <div class="tenant-unit">R01 - Unit B2</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2400/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2024-10-31</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 5 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Ali Rahman</div>
+                                <div class="tenant-unit">R01 - Unit C1</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2600/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-03-31</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 6 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Nurul Aisyah</div>
+                                <div class="tenant-unit">R02 - Unit A1</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2700/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-02-28</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 7 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Hassan bin Omar</div>
+                                <div class="tenant-unit">R02 - Unit A2</div>
+                            </div>
+                            <div class="status-badge unpaid">UNPAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2550/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2024-12-15</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 8 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Aminah binti Yusuf</div>
+                                <div class="tenant-unit">R02 - Unit B1</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2450/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-04-30</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 9 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Mohd Zainal</div>
+                                <div class="tenant-unit">R02 - Unit B2</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2800/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-01-31</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 10 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Salmah binti Ahmad</div>
+                                <div class="tenant-unit">R03 - Unit A1</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2650/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-05-15</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 11 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Abdul Rahman</div>
+                                <div class="tenant-unit">R03 - Unit A2</div>
+                            </div>
+                            <div class="status-badge unpaid">UNPAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2400/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2024-11-20</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 12 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Norazlina binti Ismail</div>
+                                <div class="tenant-unit">R03 - Unit B1</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2750/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-06-30</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 13 -->
+                    <div class="tenant-item">
+                        <div class="tenant-header">
+                            <div class="tenant-info">
+                                <div class="tenant-name">Ibrahim bin Khalil</div>
+                                <div class="tenant-unit">R03 - Unit B2</div>
+                            </div>
+                            <div class="status-badge paid">PAID</div>
+                        </div>
+                        
+                        <div class="tenant-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Rent</div>
+                                <div class="detail-value rent">$2900/mo</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Lease Expiry</div>
+                                <div class="detail-value expiry">2025-07-31</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-items">
+                <a href="index.html" class="nav-item">
+                    <div class="nav-icon icon-dashboard"></div>
+                    <div class="nav-label">Dashboard</div>
+                </a>
+                <a href="properties.html" class="nav-item">
+                    <div class="nav-icon icon-properties"></div>
+                    <div class="nav-label">Properties</div>
+                </a>
+                <a href="financial.html" class="nav-item">
+                    <div class="nav-icon icon-financial"></div>
+                    <div class="nav-label">Financial</div>
+                </a>
+                <a href="tenant.html" class="nav-item active">
+                    <div class="nav-icon icon-tenants">U</div>
+                    <div class="nav-label">Tenants</div>
+                </a>
+                <a href="reportview.html" class="nav-item">
+                    <div class="nav-icon icon-reports">≡</div>
+                    <div class="nav-label">Report</div>
+                </a>
+                <a href="setting.html" class="nav-item">
+                    <div class="nav-icon icon-settings">⚙</div>
+                    <div class="nav-label">Settings</div>
+                </a>
+            </div>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile-optimized interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            function initializeMobileOptimizations() {
+                // Prevent zoom on double tap
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function (event) {
+                    const now = (new Date()).getTime();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+
+                // Add smooth scrolling for mobile
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // Add haptic feedback for navigation and tenant items
+                const interactiveItems = document.querySelectorAll('.nav-item, .tenant-item, .stat-card');
+                interactiveItems.forEach(item => {
+                    item.addEventListener('touchstart', function() {
+                        // Add visual feedback
+                        this.style.transform = 'scale(0.98)';
+                        
+                        // Vibrate if supported
+                        if (navigator.vibrate) {
+                            navigator.vibrate(10);
+                        }
+                    });
+                    
+                    item.addEventListener('touchend', function() {
+                        // Reset visual feedback
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    });
+                });
+            }
+
+            // Initialize mobile optimizations
+            initializeMobileOptimizations();
+
+            // Add click handlers for tenant items (for future functionality)
+            const tenantItems = document.querySelectorAll('.tenant-item');
+            tenantItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Future: Open tenant details modal or navigate to tenant profile
+                    console.log('Tenant clicked:', this.querySelector('.tenant-name').textContent);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
